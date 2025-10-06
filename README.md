@@ -22,21 +22,23 @@ La idea principal de esta célula es **centralizar** los servicios de identidad 
 | Servicio | Descripción breve |
 |-----------|------------------|
 | 🧍 **Account Service** | Gestiona cuentas, perfiles y datos de usuario. |
-| 🔐 **Auth Service** | Se encarga de la autenticación y emisión de tokens. |
-| 🛡️ **Authz Service** | Controla los permisos y roles de acceso. |
+| 🔐 **Auth Service** | Maneja la autenticación y emisión de tokens. |
+| 🛡️ **AuthZ Service** | Controla permisos, roles y acceso a recursos. |
+| 🌐 **Identity Gateway** | Punto de entrada que enruta y unifica las peticiones hacia los demás servicios. |
 
 ---
 
 ## 🧩 Estructura del repositorio
 
+```text
 identity-cell/
 ├── account-service/
 ├── auth-service/
 ├── authz-service/
+├── identity-gateway/
 ├── docker-compose.yml
 └── README.md
-
-
+```
 Cada carpeta representa un microservicio independiente que, junto con los demás, conforma la célula de identidad.
 
 ---
