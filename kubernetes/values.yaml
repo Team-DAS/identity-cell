@@ -1,0 +1,44 @@
+# =================================================================
+# PANEL DE CONTROL PARA LA CÉLULA DE IDENTIDAD
+# =================================================================
+
+# Define el namespace donde vivirá toda la célula.
+namespace: "identity-cell"
+
+# Lista de todos los microservicios a desplegar.
+# Helm creará un Deployment y un Service para cada uno.
+services:
+  account-service:
+    repository: argemm08/account-service # ¡CAMBIA ESTO!
+    tag: "latest" # O una versión específica como "1.0.0"
+    port: 8081
+  auth-service:
+    repository: argemm08/authentication-service # ¡CAMBIA ESTO!
+    tag: "latest"
+    port: 8082
+  authorization-service:
+    repository: argemm08/authorization-service # ¡CAMBIA ESTO!
+    tag: "latest"
+    port: 8083
+  identity-gateway:
+    repository: argemm08/identity-gateway # ¡CAMBIA ESTO!
+    tag: "latest"
+    port: 8080
+
+# Configuración que se compartirá entre los servicios.
+config:
+  mongoHost: "mongo-identity" # El nombre del service de MongoDB
+  mongoPort: "27017"
+  mongoDatabase: "identity_db"
+  jwtExpiration: "3600000"       # 1 hora en milisegundos
+  jwtRefreshExpiration: "604800000" # 7 días en milisegundos
+
+# Secretos de la aplicación.
+# IMPORTANTE: El valor debe estar codificado en Base64.
+secrets:
+  jwtSecret: UjNOMFFFVnpUV2xEYkVCMlpWTmxZM0psZEdGVGRYQmxja3hoY21kaFdVTnZiWEJzWldwaFVHRnlZVVZzVUhKdmVXVmpkRzlHY21WbGJHRnVZMlV5TURJMQ==
+
+# Configuración para la base de datos MongoDB
+mongo:
+  image: "mongo:latest"
+  port: 27017

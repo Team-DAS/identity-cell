@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.verification.url.base",
+      "type": "java.lang.String",
+      "description": "Description for app.verification.url.base."
+  }
+] }

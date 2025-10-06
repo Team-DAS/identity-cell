@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # El nombre que le damos a nuestro "tablón de anuncios".
+  name: identity-config
+  # Lo creamos dentro del namespace de nuestra célula.
+  namespace: {{ .Values.namespace }}
+data:
+  # Aquí creamos las "notas" en el tablón, que se convertirán
+  # en variables de entorno. El formato es:
+  SPRING_DATA_MONGODB_URI: "mongodb://{{ .Values.config.mongoHost }}:{{ .Values.config.mongoPort }}/{{ .Values.config.mongoDatabase }}"
+  JWT_EXPIRATION: "{{ .Values.config.jwtExpiration }}"
+  JWT_REFRESH_EXPIRATION: "{{ .Values.config.jwtRefreshExpiration }}"

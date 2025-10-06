@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-identity
+  namespace: {{ .Values.namespace }}
+spec:
+  # El nombre del Service que controla este StatefulSet
+  serviceName: {{ .Values.config.mongoHost }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-identity
+  template:
+    metadata:
+      labels:
+        app: mongo-identity
+    spec:
+      containers:
+        - name: mongo
+          image: "{{ .Values.mongo.image }}"
+          ports:
+            - containerPort: {{ .Values.mongo.port }}
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+  # Esta es la parte clave: define cómo se debe crear el almacenamiento persistente.
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-persistent-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi # Solicitamos 1 Gigabyte de espacio en disco

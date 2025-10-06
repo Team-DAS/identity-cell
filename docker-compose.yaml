@@ -1,0 +1,126 @@
+# Definición de la red privada para que los servicios se comuniquen
+networks:
+  identity-network:
+    driver: bridge
+
+# Definición del volumen para que los datos de la BD no se pierdan
+volumes:
+  mongo-data:
+    driver: local
+
+services:
+  # --- Base de Datos ---
+  mongo:
+    image: mongo:latest
+    container_name: mongo_identity
+    ports:
+      - "27017:27017" # Exponemos el puerto solo para poder inspeccionar la BD desde tu máquina
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - identity-network
+
+  # --- Microservicios de la Célula 1 ---
+
+  account-service:
+    build:
+      context: ./account-service # Ruta a la carpeta del proyecto
+    container_name: account-service
+    restart: unless-stopped
+    networks:
+      - identity-network
+    depends_on:
+      - mongo
+    environment:
+      - SERVER_PORT=8081 # Puerto interno del servicio
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/identity_db # Conexión a la BD por su nombre de servicio
+      - EMAIL_USERNAME=${EMAIL_USERNAME} # Leemos las variables del archivo .env
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - APP_RESET_PASSWORD_URL_BASE=http://localhost:3000/reset-password
+    logging: 
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service
+    restart: unless-stopped
+    networks:
+      - identity-network
+    depends_on:
+      - mongo
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/identity_db
+      - JWT_SECRET=${JWT_SECRET} # Leemos las variables del archivo .env
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION}
+    logging: 
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+
+  authz-service:
+    build:
+      context: ./authz-service
+    container_name: authorization-service
+    restart: unless-stopped
+    networks:
+      - identity-network
+    environment:
+      - SERVER_PORT=8083
+      - JWT_SECRET=${JWT_SECRET}
+    logging: 
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+
+  identity-gateway:
+    build:
+      context: ./identity-gateway
+    container_name: identity-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080" # <-- ¡Este es el ÚNICO puerto que exponemos al mundo exterior!
+    networks:
+      - identity-network
+    depends_on: # El Gateway solo arranca cuando los demás servicios están listos
+      - account-service
+      - auth-service
+      - authz-service
+    environment:
+      - SERVER_PORT=8080
+    logging: 
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - identity-network
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    networks:
+      - identity-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - identity-network
+    depends_on:
+      - prometheus
+      - loki
