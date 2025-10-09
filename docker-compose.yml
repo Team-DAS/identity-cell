@@ -1,12 +1,11 @@
-version: '3.8'
-
 networks:
   # Red privada para la comunicación interna de la célula
   identity-network:
     driver: bridge
   # Red compartida para conectarse a la célula de observabilidad
-  observability-network:
+  infrastructure-network:
     external: true
+    name: infrastructure-network
 
 volumes:
   mongo-identity-data: # Renombrado para mayor claridad
@@ -34,7 +33,7 @@ services:
     restart: unless-stopped
     networks:
       - identity-network
-      - observability-network # <-- Conectado a la red compartida
+      - infrastructure-network # <-- Conectado a la red compartida
     depends_on:
       - mongo_identity
     environment:
@@ -43,10 +42,8 @@ services:
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - APP_RESET_PASSWORD_URL_BASE=http://localhost:3000/auth/reset-password
-    logging: 
-      driver: loki
-      options:
-        loki-url: "http://loki:3100/loki/api/v1/push" # <-- URL corregida
+      - RABBITMQ_HOST=rabbitmq-udeajobs
+
 
   auth-service:
     build:
@@ -55,7 +52,7 @@ services:
     restart: unless-stopped
     networks:
       - identity-network
-      - observability-network # <-- Conectado a la red compartida
+      - infrastructure-network # <-- Conectado a la red compartida
     depends_on:
       - mongo_identity
     environment:
@@ -64,10 +61,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION}
-    logging: 
-      driver: loki
-      options:
-        loki-url: "http://loki:3100/loki/api/v1/push" # <-- URL corregida
+
 
   authz-service:
     build:
@@ -76,14 +70,10 @@ services:
     restart: unless-stopped
     networks:
       - identity-network
-      - observability-network # <-- Conectado a la red compartida
+      - infrastructure-network # <-- Conectado a la red compartida
     environment:
       - SERVER_PORT=8083
       - JWT_SECRET=${JWT_SECRET}
-    logging: 
-      driver: loki
-      options:
-        loki-url: "http://loki:3100/loki/api/v1/push"
 
   identity-gateway:
     build:
@@ -94,14 +84,10 @@ services:
       - "8080:8080"
     networks:
       - identity-network
-      - observability-network # <-- Conectado a la red compartida
+      - infrastructure-network # <-- Conectado a la red compartida
     depends_on:
       - account-service
       - auth-service
       - authz-service
     environment:
       - SERVER_PORT=8080
-    logging: 
-      driver: loki
-      options:
-        loki-url: "http://loki:3100/loki/api/v1/push" 

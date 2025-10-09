@@ -1,12 +1,29 @@
 package com.udeajobs.identity.account_service.dto;
 
 import com.udeajobs.identity.account_service.enums.ROLE;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
+/**
+ * DTO para las peticiones de registro de nuevos usuarios.
+ *
+ * Esta clase encapsula todos los datos necesarios para el registro de un nuevo usuario
+ * en el sistema, incluyendo validaciones de formato para asegurar la integridad
+ * de los datos y la seguridad de las contraseñas.
+ *
+ * @param fullName nombre completo del usuario (máximo 100 caracteres)
+ * @param username nombre de usuario único para identificación
+ * @param password contraseña con requisitos de seguridad (mínimo 8 caracteres, mayúscula, minúscula, número y carácter especial)
+ * @param email dirección de correo electrónico válida
+ * @param role rol del usuario en el sistema (FREELANCER o EMPLOYER)
+ *
+ * @author UdeAJobs Team
+ * @version 1.0
+ * @since 1.0
+ */
 public record RegistrationRequest(
+    @NotBlank(message = "Fullname is mandatory")
+    @Size(max = 100, message = "Fullname should be less than 100 characters")
+    String fullName,
     @NotBlank(message = "Username is mandatory") String username,
     @NotBlank(message = "Password is mandatory")
         @Pattern(
