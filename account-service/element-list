@@ -1,0 +1,11 @@
+com.udeajobs.identity.account_service
+com.udeajobs.identity.account_service.config
+com.udeajobs.identity.account_service.controller
+com.udeajobs.identity.account_service.dto
+com.udeajobs.identity.account_service.entity
+com.udeajobs.identity.account_service.enums
+com.udeajobs.identity.account_service.events
+com.udeajobs.identity.account_service.exception
+com.udeajobs.identity.account_service.repository
+com.udeajobs.identity.account_service.service.implementation
+com.udeajobs.identity.account_service.service.interfaces
