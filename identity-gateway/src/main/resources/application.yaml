@@ -5,24 +5,36 @@ spring:
   application:
     name: cell-gateway
   cloud:
+    discovery:
+        client:
+            simple:
+              instances:
+                  account-service:
+                  - uri: http://account-service:8081
+                  auth-service:
+                  - uri: http://auth-service:8082
+                  authz-service:
+                  - uri: http://authz-service:8083
     gateway:
       routes:
         - id: account-service
-          uri: http://account-service:8081
+          uri: lb://account-service
           predicates:
-            - Path=/api/v1/accounts/**
+            - Path=/identity/api/v1/accounts/**
+          filters:
+            - StripPrefix=1
         - id: auth-service
-          uri: http://auth-service:8082
+          uri: lb://auth-service
           predicates:
-            - Path=/api/v1/auth/**
+            - Path=/identity/api/v1/auth/**
+          filters:
+            - StripPrefix=1
         - id: authz-service
-          uri: http://authz-service:8083
+          uri: lb://authz-service
           predicates:
-            - Path=/api/v1/authz/**
-
-cors:
-  allowedOrigins:
-    - http://localhost:3000
+            - Path=/identity/api/v1/authz/**
+          filters:
+            - StripPrefix=1
 
 management: # Configuracion del Actuator
   endpoints:

@@ -2,10 +2,15 @@ networks:
   # Red privada para la comunicación interna de la célula
   identity-network:
     driver: bridge
+    name: identity-network
   # Red compartida para conectarse a la célula de observabilidad
   infrastructure-network:
     external: true
     name: infrastructure-network
+
+  web-gateway:
+    external: true
+    name: web-gateway
 
 volumes:
   mongo-identity-data: # Renombrado para mayor claridad
@@ -22,7 +27,7 @@ services:
     volumes:
       - mongo-identity-data:/data/db
     networks:
-      - identity-network # La BD no necesita enviar logs, se queda en su red privada
+      - identity-network 
 
   # --- Microservicios de la Célula 1 (Conectados a ambas redes) ---
 
@@ -66,7 +71,7 @@ services:
   authz-service:
     build:
       context: ./authz-service
-    container_name: authorization-service
+    container_name: authz-service
     restart: unless-stopped
     networks:
       - identity-network
@@ -80,14 +85,27 @@ services:
       context: ./identity-gateway
     container_name: identity-gateway
     restart: unless-stopped
-    ports:
-      - "8080:8080"
+    labels:
+      # 1. Habilita Traefik para este contenedor
+      - "traefik.enable=true"
+
+      # 2. Define la regla del router: ¿Qué URLs debe capturar?
+      - "traefik.http.routers.identity.rule=PathPrefix(`/identity`)"
+      - "traefik.http.routers.identity.entrypoints=web"
+
+      # 3. Define el servicio: ¿A qué puerto interno debe enviar el tráfico?
+      - "traefik.http.services.identity.loadbalancer.server.port=8080"
+      
+      # 4. Aplica el middleware de CORS centralizado
+      - "traefik.http.routers.identity.middlewares=cors-policy@file"
     networks:
       - identity-network
       - infrastructure-network # <-- Conectado a la red compartida
+      - web-gateway
     depends_on:
       - account-service
       - auth-service
       - authz-service
     environment:
       - SERVER_PORT=8080
+    
