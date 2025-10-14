@@ -9,7 +9,7 @@ on:
       - main
     paths:
       - '**.java' # Optimización: solo se ejecuta si cambian archivos Java
-
+  workflow_dispatch:
 # Permisos para que la Action pueda escribir en el repositorio
 permissions:
   contents: write
