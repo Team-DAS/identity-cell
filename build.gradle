@@ -1,0 +1,18 @@
+// En el build.gradle de la raíz
+
+task javadocAll(type: Javadoc) {
+    group = "Documentation"
+    description = "Genera un Javadoc unificado para todos los subproyectos."
+
+    // Título que aparecerá en el sitio de Javadoc
+    title = "UdeAJobs - ${rootProject.name} API"
+
+    // Reúne el código fuente de todos los subproyectos
+    source subprojects.collect { it.sourceSets.main.java.srcDirs }
+
+    // Reúne las dependencias de todos los subproyectos para que los Javadocs se generen correctamente
+    classpath = files(subprojects.collect { it.configurations.compileClasspath })
+
+    // Evita que la build falle si hay pequeños errores en los comentarios de Javadoc
+    failOnError = false
+}

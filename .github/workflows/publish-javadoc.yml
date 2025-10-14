@@ -1,0 +1,47 @@
+# En .github/workflows/javadoc-deploy.yml
+
+name: Build and Deploy Javadoc (Gradle)
+
+# Se dispara cada vez que haces un push a la rama 'main'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.java' # Optimización: solo se ejecuta si cambian archivos Java
+
+# Permisos para que la Action pueda escribir en el repositorio
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Descarga tu código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configura Java y el caché de Gradle
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '121'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      # 3. Da permisos de ejecución al script de Gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 4. Genera los Javadocs usando la tarea que creamos
+      - name: Generate Javadoc with Gradle
+        run: ./gradlew javadocAll
+
+      # 5. Publica el resultado en GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # La carpeta que contiene el HTML generado por Gradle
+          publish_dir: ./build/docs/javadoc
