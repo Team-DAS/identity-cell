@@ -1,0 +1,6 @@
+com.identity_cell.authz_service
+com.identity_cell.authz_service.controller
+com.identity_cell.authz_service.dto
+com.identity_cell.authz_service.exception
+com.identity_cell.authz_service.service
+com.identity_cell.authz_service.util
