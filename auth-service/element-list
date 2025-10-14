@@ -1,0 +1,8 @@
+com.udeajobs.identity.auth_service
+com.udeajobs.identity.auth_service.config
+com.udeajobs.identity.auth_service.controller
+com.udeajobs.identity.auth_service.dto
+com.udeajobs.identity.auth_service.entity
+com.udeajobs.identity.auth_service.repository
+com.udeajobs.identity.auth_service.service
+com.udeajobs.identity.auth_service.util
