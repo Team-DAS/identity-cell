@@ -85,19 +85,6 @@ services:
       context: ./identity-gateway
     container_name: identity-gateway
     restart: unless-stopped
-    labels:
-      # 1. Habilita Traefik para este contenedor
-      - "traefik.enable=true"
-
-      # 2. Define la regla del router: ¿Qué URLs debe capturar?
-      - "traefik.http.routers.identity.rule=PathPrefix(`/identity`)"
-      - "traefik.http.routers.identity.entrypoints=web"
-
-      # 3. Define el servicio: ¿A qué puerto interno debe enviar el tráfico?
-      - "traefik.http.services.identity.loadbalancer.server.port=8080"
-      
-      # 4. Aplica el middleware de CORS centralizado
-      - "traefik.http.routers.identity.middlewares=cors-policy@file"
     networks:
       - identity-network
       - infrastructure-network # <-- Conectado a la red compartida
