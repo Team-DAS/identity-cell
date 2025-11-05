@@ -41,8 +41,6 @@ services:
       - infrastructure-network # <-- Conectado a la red compartida
     depends_on:
       - mongo_identity
-    ports:
-      - "8080:8080"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongo_identity:27017/identity_db
       - EMAIL_USERNAME=${EMAIL_USERNAME}
@@ -80,7 +78,8 @@ services:
       - account-service
       - auth-service
     environment:
-      - SERVER_PORT=8080
+      - ACCOUNT_SERVICE_URL=http://account-service:8080
+      - AUTH_SERVICE_URL=http://auth-service:8080
 
   identity-docs:
     image: scalarapi/api-reference:latest # *** ¡Cambiando a la imagen correcta! ***

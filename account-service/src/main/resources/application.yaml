@@ -32,3 +32,10 @@ management:
 
 app:
   reset-url-base: ${APP_RESET_PASSWORD_URL_BASE}
+
+springdoc:
+  api-docs:
+    path: /docs
+server:
+  servlet:
+    context-path: /api/v1/accounts

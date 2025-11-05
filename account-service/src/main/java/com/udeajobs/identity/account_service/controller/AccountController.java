@@ -1,13 +1,21 @@
 package com.udeajobs.identity.account_service.controller;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.udeajobs.identity.account_service.dto.ErrorResponse;
+import com.udeajobs.identity.account_service.dto.ForgotPasswordRequest;
 import com.udeajobs.identity.account_service.dto.RegistrationRequest;
 import com.udeajobs.identity.account_service.dto.ResetPasswordRequest;
 import com.udeajobs.identity.account_service.dto.VerificationRequest;
-import com.udeajobs.identity.account_service.dto.ForgotPasswordRequest;
 import com.udeajobs.identity.account_service.entity.User;
 import com.udeajobs.identity.account_service.service.interfaces.AccountService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,12 +25,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador REST para operaciones de gestión de cuentas de usuario.
@@ -39,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/")
 public class AccountController {
     private final AccountService accountService;
 
