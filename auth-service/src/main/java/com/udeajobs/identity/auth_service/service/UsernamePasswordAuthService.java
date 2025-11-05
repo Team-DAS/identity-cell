@@ -15,6 +15,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementación del servicio de autenticación usando username y password.
+ *
+ * Gestiona la autenticación de usuarios mediante Spring Security, generación de tokens JWT
+ * y renovación de access tokens mediante refresh tokens.
+ *
+ * @author UdeAJobs Team
+ * @version 1.0
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Service
 public class UsernamePasswordAuthService implements AuthService {
@@ -23,6 +33,20 @@ public class UsernamePasswordAuthService implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final JwtProvider jwtProvider;
 
+    /**
+     * Autentica un usuario con email y contraseña.
+     *
+     * Proceso de autenticación:
+     * 1. Valida las credenciales con Spring Security
+     * 2. Establece el contexto de seguridad
+     * 3. Genera un access token JWT
+     * 4. Crea un refresh token
+     * 5. Retorna ambos tokens en la respuesta
+     *
+     * @param loginRequest credenciales del usuario (email y contraseña)
+     * @return AuthResponse con access token, refresh token y tipo de token
+     * @throws org.springframework.security.authentication.BadCredentialsException si las credenciales son incorrectas
+     */
     @Override
     public AuthResponse login(LoginRequest loginRequest) {
         // 1. Autenticar con Spring Security
@@ -47,6 +71,19 @@ public class UsernamePasswordAuthService implements AuthService {
         return new AuthResponse(token, refreshToken.getToken(), "Bearer" );
     }
 
+    /**
+     * Genera un nuevo access token usando un refresh token válido.
+     *
+     * Proceso de renovación:
+     * 1. Busca el refresh token en la base de datos
+     * 2. Verifica que no haya expirado
+     * 3. Genera un nuevo access token JWT
+     * 4. Retorna el nuevo access token con el mismo refresh token
+     *
+     * @param refreshTokenRequest objeto con el refresh token
+     * @return NewAccessTokenResponse con el nuevo access token y el mismo refresh token
+     * @throws RuntimeException si el refresh token no existe o ha expirado
+     */
     @Override
     public NewAccessTokenResponse refreshAccessToken(RefreshTokenRequest refreshTokenRequest) {
         // 1. Buscar el refresh token en la base de datos

@@ -1,5 +1,6 @@
 package com.udeajobs.identity.account_service.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
 /**
@@ -18,10 +19,30 @@ import java.time.LocalDateTime;
  * @version 1.0
  * @since 1.0
  */
+@Schema(description = "Respuesta estándar de error de la API")
 public record ErrorResponse(
+        @Schema(
+                description = "Código de estado HTTP del error",
+                example = "400"
+        )
         int status,
+
+        @Schema(
+                description = "Mensaje descriptivo del error o lista de errores de validación",
+                example = "Invalid email format"
+        )
         Object message,
+
+        @Schema(
+                description = "Tipo o categoría del error",
+                example = "Bad Request"
+        )
         String error,
+
+        @Schema(
+                description = "Timestamp de cuando ocurrió el error",
+                example = "2025-11-05T14:30:00"
+        )
         LocalDateTime timestamp
 ) {
     /**

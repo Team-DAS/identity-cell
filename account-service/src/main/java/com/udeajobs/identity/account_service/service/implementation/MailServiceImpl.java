@@ -30,7 +30,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Profile("prod")
 public class MailServiceImpl implements MailService {
 
     private final JavaMailSender mailSender;

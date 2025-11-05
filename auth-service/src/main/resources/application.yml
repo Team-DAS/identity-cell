@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: auth-service
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  refresh:
+    expiration: ${JWT_REFRESH_EXPIRATION}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info

@@ -1,12 +1,22 @@
-# Paso 1: Usar una imagen base oficial de Java 17
-FROM eclipse-temurin:21-jdk-jammy
+# Builder
+FROM gradle:9.1.0-jdk21 AS builder
+WORKDIR /app
 
-# Paso 2: Argumento para especificar la ruta del archivo JAR
-# Maven lo coloca en la carpeta 'target', Gradle en 'build/libs'
-ARG JAR_FILE=build/libs/*.jar
+COPY build.gradle gradlew ./
+COPY gradle ./gradle
 
-# Paso 3: Copiar el archivo JAR compilado al contenedor con un nombre genérico
-COPY ${JAR_FILE} app.jar
+RUN ./gradlew dependencies
 
-# Paso 4: Comando para ejecutar la aplicación cuando el contenedor se inicie
-ENTRYPOINT ["java","-jar","/app.jar", "--spring.profiles.active=prod"]
+COPY src ./src
+
+# Construir el jar
+RUN ./gradlew build --no-daemon -x test
+
+# Runtime
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Ejecucción
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,0 +1,14 @@
+info:
+  title: UdeA Jobs APIs
+  version: 1.0.0
+
+apis:
+  - name: Account Service
+    url: http://account-service:8080/v3/api-docs
+    servers:
+      - url: http://localhost:80
+  - name: Auth Service
+    url: http://auth-service:8080/v3/api-docs
+    servers:
+      - url: http://localhost:80
+

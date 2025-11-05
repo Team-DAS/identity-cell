@@ -1,7 +1,0 @@
-rootProject.name = 'identity-cell'
-
-// Registra cada microservicio como un subproyecto
-include 'identity-gateway'
-include 'account-service'
-include 'auth-service'
-include 'authz-service'

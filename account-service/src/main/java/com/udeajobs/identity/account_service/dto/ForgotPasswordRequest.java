@@ -1,5 +1,6 @@
 package com.udeajobs.identity.account_service.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -16,7 +17,16 @@ import jakarta.validation.constraints.NotBlank;
  * @version 1.0
  * @since 1.0
  */
+@Schema(description = "Datos requeridos para iniciar el proceso de recuperación de contraseña")
 public record ForgotPasswordRequest(
-        @NotBlank @Email String email
+        @Schema(
+                description = "Email de la cuenta para la cual se solicita recuperación de contraseña",
+                example = "juan.perez@example.com",
+                requiredMode = Schema.RequiredMode.REQUIRED,
+                format = "email"
+        )
+        @NotBlank
+        @Email
+        String email
 ) {
 }

@@ -41,8 +41,9 @@ services:
       - infrastructure-network # <-- Conectado a la red compartida
     depends_on:
       - mongo_identity
+    ports:
+      - "8080:8080"
     environment:
-      - SERVER_PORT=8081
       - SPRING_DATA_MONGODB_URI=mongodb://mongo_identity:27017/identity_db
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
@@ -61,24 +62,10 @@ services:
     depends_on:
       - mongo_identity
     environment:
-      - SERVER_PORT=8082
       - SPRING_DATA_MONGODB_URI=mongodb://mongo_identity:27017/identity_db
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION}
-
-
-  authz-service:
-    build:
-      context: ./authz-service
-    container_name: authz-service
-    restart: unless-stopped
-    networks:
-      - identity-network
-      - infrastructure-network # <-- Conectado a la red compartida
-    environment:
-      - SERVER_PORT=8083
-      - JWT_SECRET=${JWT_SECRET}
 
   identity-gateway:
     build:
@@ -92,7 +79,16 @@ services:
     depends_on:
       - account-service
       - auth-service
-      - authz-service
     environment:
       - SERVER_PORT=8080
-    
+
+  identity-docs:
+    image: scalarapi/api-reference:latest # *** ¡Cambiando a la imagen correcta! ***
+    container_name: identity-docs
+    ports:
+    - "5051:8080" # El puerto de la imagen 'api-reference' es 8080 por defecto
+    restart: unless-stopped
+    env_file:
+      - ./scalar/.env
+    networks:
+      - identity-network
