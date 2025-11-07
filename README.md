@@ -23,7 +23,6 @@ La idea principal de esta célula es **centralizar** los servicios de identidad 
 |-----------|------------------|
 | 🧍 **Account Service** | Gestiona cuentas, perfiles y datos de usuario. |
 | 🔐 **Auth Service** | Maneja la autenticación y emisión de tokens. |
-| 🛡️ **AuthZ Service** | Controla permisos, roles y acceso a recursos. |
 | 🌐 **Identity Gateway** | Punto de entrada que enruta y unifica las peticiones hacia los demás servicios. |
 
 ---
