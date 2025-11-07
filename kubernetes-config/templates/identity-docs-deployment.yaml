@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: identity-docs
 spec:
-  replicas: 1
+  replicas: {{ .Values.identityDocs.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: identity-docs

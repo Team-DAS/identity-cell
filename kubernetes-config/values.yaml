@@ -21,6 +21,7 @@ mongo-identity:
 # --- Configuración del Microservicio: Account Service ---
 
 accountService:
+  replicaCount: 1
   
   image:
     repository: "ghcr.io/team-das/identity-cell/account-service"
@@ -37,6 +38,8 @@ accountService:
 
 # --- Configuración del Microservicio: Auth Service ---
 authService:
+  replicaCount: 1
+
   image:
     repository: "ghcr.io/team-das/identity-cell/auth-service" 
     tag: "latest"
@@ -48,6 +51,7 @@ authService:
 
 # --- Configuración del Microservicio: Identity Gateway ---
 identityGateway:
+  replicaCount: 1
   image:
     repository: "ghcr.io/team-das/identity-cell/identity-gateway"
     tag: "latest"
@@ -57,6 +61,7 @@ identityGateway:
 
 # --- Configuración de la Documentación (Scalar) ---
 identityDocs:
+  replicaCount: 2
   image:
     repository: "scalarapi/api-reference" # pública de Docker Hub
     tag: "latest" 

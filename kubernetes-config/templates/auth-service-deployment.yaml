@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: auth-service 
 spec:
-  replicas: 1
+  replicas: {{ .Values.authService.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: auth-service 
@@ -15,7 +15,7 @@ spec:
           # Configuración para acceder a imágenes privadas
       imagePullSecrets:
       {{- toYaml .Values.imagePullSecrets | nindent 10 }}
-      
+
       containers:
       - name: auth-service
         image: "{{ .Values.authService.image.repository }}:{{ .Values.authService.image.tag }}"

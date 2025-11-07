@@ -4,7 +4,7 @@ metadata:
   # El nombre del despliegue
   name: account-service
 spec:
-  replicas: 1 # 1 copia del servicio
+  replicas: {{ .Values.accountService.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: account-service # El "selector"
