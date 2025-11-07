@@ -1,4 +1,4 @@
-name: 1. Plantilla de Build y Push a GHCR
+name: Build and Push GHCR Modelo
 
 on:
   workflow_call:
