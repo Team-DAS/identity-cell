@@ -28,3 +28,7 @@ dependencies:
     version: "18.1.8"
     repository: "https://charts.bitnami.com/bitnami"
     alias: mongo-identity
+  - name: rabbitmq
+    version: "14.2.0"
+    repository: "https://charts.bitnami.com/bitnami"
+    alias: rabbitmq-udeajobs 

@@ -17,6 +17,16 @@ mongo-identity:
 
   fullnameOverride: "mongo-identity"
 
+rabbitmq-udeajobs:
+
+  # 1. Deshabilitamos la autenticación para este entorno
+  auth:
+    enabled: false
+
+  # 2. Le decimos que no use persistencia (para esta prueba)
+  persistence:
+    enabled: false
+
 
 # --- Configuración del Microservicio: Account Service ---
 
