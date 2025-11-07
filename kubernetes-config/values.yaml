@@ -14,7 +14,7 @@ accountService:
 
   # Variables de entorno para account-service
   env:
-    SPRING_DATA_MONGODB_URI: "mongodb://mongo-identity:27017/identity_db"
+    SPRING_DATA_MONGODB_URI: "mongodb+srv://admin_udeajobs:RPrz1A5e3Ru75HW1@udeajobs.pmmghpu.mongodb.net/identity_db?appName=udeajobs"
     RABBITMQ_HOST: "rabbitmq-udeajobs" 
     EMAIL_USERNAME: "udeajobs674@gmail.com" 
     EMAIL_PASSWORD: "qycjcfbenmfwfmhs" 
