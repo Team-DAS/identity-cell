@@ -12,6 +12,8 @@ jwt:
     expiration: ${JWT_REFRESH_EXPIRATION}
 
 management:
+  server:
+    port: 8081
   endpoints:
     web:
       exposure:
@@ -21,5 +23,6 @@ springdoc:
   api-docs:
     path: /docs
 server:
+  port: 8080
   servlet:
     context-path: /api/v1/auth
