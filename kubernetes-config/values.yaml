@@ -1,0 +1,88 @@
+# ===============================================
+# Panel de Control para la Célula de Identidad
+# ===============================================
+
+# --- Configuración de nuestra dependencia MongoDB ---
+mongo-identity:
+
+  # 1. Deshabilitamos la autenticación para este entorno
+  auth:
+    enabled: false
+
+  # 2. Le decimos al chart que cree nuestra base de datos
+  #    'identity_db' automáticamente en el arranque.
+  mongodbDatabase: "identity_db"
+
+  # 3. Nombre personalizado para el despliegue de MongoDB
+
+  fullnameOverride: "mongo-identity"
+
+
+# --- Configuración del Microservicio: Account Service ---
+
+accountService:
+  
+  image:
+    repository: "ghcr.io/team-das/identity-cell/account-service"
+    tag: "latest" # O la versión específica que quieras usar
+
+  # Variables de entorno para account-service
+  env:
+    SPRING_DATA_MONGODB_URI: "mongodb://mongo-identity:27017/identity_db"
+    RABBITMQ_HOST: "rabbitmq-udeajobs" 
+    EMAIL_USERNAME: "udeajobs674@gmail.com" 
+    EMAIL_PASSWORD: "qycjcfbenmfwfmhs" 
+    APP_RESET_PASSWORD_URL_BASE: "http://localhost:3000/auth/reset-password"
+
+
+# --- Configuración del Microservicio: Auth Service ---
+authService:
+  image:
+    repository: "ghcr.io/team-das/identity-cell/auth-service" 
+    tag: "latest"
+  env:
+    SPRING_DATA_MONGODB_URI: "mongodb://mongo-identity:27017/identity_db"
+    JWT_SECRET: "7NG5umhwfjKJDAqa53AlX1vNOypdUlUG4b/CuN8Wja8=" 
+    JWT_EXPIRATION: "86400000"
+    JWT_REFRESH_EXPIRATION: "604800000"
+
+# --- Configuración del Microservicio: Identity Gateway ---
+identityGateway:
+  image:
+    repository: "ghcr.io/team-das/identity-cell/identity-gateway"
+    tag: "latest"
+  env:
+    ACCOUNT_SERVICE_URL: "http://account-service:8080" # <-- Usa el nombre del Service de K8s
+    AUTH_SERVICE_URL: "http://auth-service:8080"    # <-- Usa el nombre del Service de K8s
+
+# --- Configuración de la Documentación (Scalar) ---
+identityDocs:
+  image:
+    repository: "scalarapi/api-reference" # pública de Docker Hub
+    tag: "latest" 
+  
+  env:
+    API_REFERENCE_CONFIG: |
+      {
+        "sources": [
+          {
+            "title": "Auth Service",
+            "url": "http://localhost:80/identity-cell/api/v1/auth/docs",
+            "servers": [
+              { "url": "http://localhost:80/identity-cell/api/v1/auth", "description": "API Gateway público" }
+            ]
+          },
+          {
+            "title": "Account Service",
+            "url": "http://localhost:80/identity-cell/api/v1/accounts/docs",
+            "servers": [
+              { "url": "http://localhost:80/identity-cell/api/v1/accounts", "description": "API Gateway público" }
+            ]
+          }
+        ],
+        "theme": "bluePlanet"
+      }
+
+# --- Configuración Global de Pull de Imágenes ---
+imagePullSecrets:
+  - name: ghcr-creds

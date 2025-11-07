@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service 
+  template:
+    metadata:
+      labels:
+        app: auth-service 
+    spec:
+          # Configuración para acceder a imágenes privadas
+      imagePullSecrets:
+      {{- toYaml .Values.imagePullSecrets | nindent 10 }}
+      
+      containers:
+      - name: auth-service
+        image: "{{ .Values.authService.image.repository }}:{{ .Values.authService.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        {{- range $key, $value := .Values.authService.env }} 
+        - name: {{ $key | quote }}
+          value: {{ $value | quote }}
+        {{- end }}

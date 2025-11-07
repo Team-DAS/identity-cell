@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-docs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: identity-docs
+  template:
+    metadata:
+      labels:
+        app: identity-docs
+    spec:
+      containers:
+      - name: identity-docs
+        image: "{{ .Values.identityDocs.image.repository }}:{{ .Values.identityDocs.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080 # Puerto interno de la imagen de Scalar
+        env:
+        {{- range $key, $value := .Values.identityDocs.env }}
+        - name: {{ $key | quote }}
+          value: {{ $value | quote }}
+        {{- end }}
