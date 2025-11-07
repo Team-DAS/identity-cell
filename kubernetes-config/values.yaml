@@ -61,7 +61,7 @@ identityGateway:
 
 # --- Configuración de la Documentación (Scalar) ---
 identityDocs:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: "scalarapi/api-reference" # pública de Docker Hub
     tag: "latest" 
