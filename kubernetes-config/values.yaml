@@ -62,29 +62,4 @@ applications:
       tag: "latest"
     env:
       - name: API_REFERENCE_CONFIG
-        value: |
-                {
-              "sources": [
-                {
-                  "title": "Auth Service",
-                  "url": "http://localhost:80/identity-cell/api/v1/auth/docs",
-                  "servers": [
-                {
-                  "url": "http://localhost:80/identity-cell/api/v1/auth",
-                  "description": "API Gateway público"
-                }
-                  ]
-                },
-                {
-                  "title": "Account Service",
-                  "url": "http://localhost:80/identity-cell/api/v1/accounts/docs",
-                  "servers": [
-                {
-                  "url": "http://localhost:80/identity-cell/api/v1/accounts",
-                  "description": "API Gateway público"
-                }
-                  ]
-                }
-              ],
-              "theme": "bluePlanet"
-                }
+        value: '{"sources":[{"title":"Auth Service","url":"http://localhost:80/identity-cell/api/v1/auth/docs","servers":[{"url":"http://localhost:80/identity-cell/api/v1/auth","description":"API Gateway público"}]},{"title":"Account Service","url":"http://localhost:80/identity-cell/api/v1/accounts/docs","servers":[{"url":"http://localhost:80/identity-cell/api/v1/accounts","description":"API Gateway público"}]}],"theme":"bluePlanet"}'
