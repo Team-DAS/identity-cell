@@ -22,7 +22,7 @@ spring:
       uri: ${SPRING_DATA_MONGODB_URI}
 
   rabbitmq:
-    host: ${RABBITMQ_HOST}
+    addresses: ${RABBITMQ_URI}
 
 management:
   server:

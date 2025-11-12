@@ -16,8 +16,8 @@ applications:
     env:
       - name: SPRING_DATA_MONGODB_URI
         value: "mongodb+srv://admin_udeajobs:RPrz1A5e3Ru75HW1@udeajobs.pmmghpu.mongodb.net/identity_db?appName=udeajobs"
-      - name: RABBITMQ_HOST
-        value: "rabbitmq-udeajobs"
+      - name: RABBITMQ_URI
+        value: "amqps://qmvnjeii:ynOJ4vgUqOr59E9nF1_elmycwIz-_oqU@campbell.lmq.cloudamqp.com/qmvnjeii"
       - name: EMAIL_USERNAME
         value: "udeajobs674@gmail.com"
       - name: EMAIL_PASSWORD

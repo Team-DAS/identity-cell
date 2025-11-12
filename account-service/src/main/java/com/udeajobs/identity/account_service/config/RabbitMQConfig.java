@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     /** Nombre del exchange principal para eventos del servicio de cuentas */
-    public static final String EXCHANGE_NAME = "udea.identity.account-service";
+    public static final String EXCHANGE_NAME = "account.exchange";
 
     /**
      * Configura el Topic Exchange para el servicio de cuentas.
