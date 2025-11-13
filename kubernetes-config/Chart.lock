@@ -1,9 +1,0 @@
-dependencies:
-- name: mongodb
-  repository: https://charts.bitnami.com/bitnami
-  version: 18.1.8
-- name: rabbitmq
-  repository: https://charts.bitnami.com/bitnami
-  version: 14.2.0
-digest: sha256:1abc143f13c454f935c5be4dc6f97f28d69a08dfaab00fd8015c8eefbddfb012
-generated: "2025-11-07T14:12:36.233677429-05:00"
