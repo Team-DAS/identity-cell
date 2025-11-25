@@ -16,16 +16,16 @@ const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL;
 
 fastify.register(httpProxy, {
   upstream: AUTH_SERVICE_URL,
-  prefix: 'identity-cell/api/v1/auth', 
-  rewritePrefix: '/api/v1/auth', 
+  prefix: '/identity-cell/auth',  // <-- URL pública simple
+  rewritePrefix: '/api/v1/auth',  // <-- URL interna con versión
 });
-
 
 fastify.register(httpProxy, {
   upstream: ACCOUNT_SERVICE_URL,
-  prefix: 'identity-cell/api/v1/accounts', 
-  rewritePrefix: '/api/v1/accounts', 
+  prefix: '/identity-cell/accounts',  // <-- URL pública simple
+  rewritePrefix: '/api/v1/accounts',  // <-- URL interna con versión
 });
+
 // --- 4. Iniciar el Servidor ---
 const start = async () => {
   try {
